@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作业一 | 亿航 EH216-S 无人驾驶载人航空器系统调研与分析 | 飞行汽车技术基础</title>
+<meta name="description" content="以亿航 EH216-S 无人驾驶载人 eVTOL 为对象，从对象界定、构型解构、四证取证、运营场景、市场经济性与工业设计视角展开的调研分析。">
+<style>
+:root{
+  --bg:#eef5fb; --paper:#fbfdff; --ink:#0d3a63; --ink2:#1b5583; --ink3:#5b81a6;
+  --line:#9dbcd8; --line2:#cfe0ef; --stamp:#b0462a; --ok:#0e7566;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);font-family:var(--sans);line-height:1.78;font-size:14.5px;
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(rgba(13,58,99,.042) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(13,58,99,.042) 1px,transparent 1px),
+    linear-gradient(rgba(13,58,99,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(13,58,99,.075) 1px,transparent 1px);
+  background-size:20px 20px,20px 20px,100px 100px,100px 100px;
+  background-attachment:fixed;
+}
+a{color:var(--ink2)}
+.layout{display:grid;grid-template-columns:74px minmax(0,1fr);max-width:1300px;margin:0 auto}
+.rail{position:sticky;top:0;height:100vh;border-right:2px solid var(--ink);background:rgba(251,253,255,.86);display:flex;flex-direction:column;align-items:center;padding:18px 0;z-index:20}
+.rail .rl-t{font:700 9px var(--mono);letter-spacing:.16em;color:var(--ink3);writing-mode:vertical-rl;margin-bottom:14px}
+.rail a{display:block;width:38px;height:34px;line-height:34px;text-align:center;font:700 11px/34px var(--mono);color:var(--ink3);border:1px solid transparent;text-decoration:none;margin:3px 0}
+.rail a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rail .rl-b{margin-top:auto;font:9px var(--mono);color:var(--ink3);writing-mode:vertical-rl;letter-spacing:.14em}
+main{padding:26px 34px 90px;min-width:0}
+.titleblock{border:2px solid var(--ink);background:var(--paper);display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1fr;box-shadow:5px 5px 0 rgba(13,58,99,.11)}
+.tb{padding:9px 12px;border-right:1px solid var(--ink);min-height:58px}
+.tb:last-child{border-right:0}
+.tb small{display:block;font:9px var(--mono);letter-spacing:.12em;color:var(--ink3);margin-bottom:4px}
+.tb b{font-size:13px;letter-spacing:.02em}
+.tb.main{background:var(--ink);color:#fff}
+.tb.main small{color:#a9cbe8}
+.tb.main b{font-size:19px;letter-spacing:.04em}
+.sheet{position:relative;background:var(--paper);border:2px solid var(--ink);margin:22px 0 0;padding:24px 28px 28px;box-shadow:5px 5px 0 rgba(13,58,99,.10)}
+.sheet::before,.sheet::after{content:"";position:absolute;width:13px;height:13px;border:2px solid var(--ink)}
+.sheet::before{left:-2px;top:-2px;border-right:0;border-bottom:0}
+.sheet::after{right:-2px;bottom:-2px;border-left:0;border-top:0}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:20px}
+.sh .no{font:700 11px var(--mono);letter-spacing:.14em;color:var(--ink2)}
+.sh .tg{font:10px var(--mono);letter-spacing:.1em;border:1px solid var(--ink);padding:3px 8px;color:var(--ink);white-space:nowrap}
+h1{font-size:38px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:25px;line-height:1.35;margin:0 0 4px}
+h3{font-size:16px;margin:26px 0 8px;padding-left:11px;border-left:4px solid var(--ink)}
+h3 .idx{font:700 11px var(--mono);color:var(--stamp);margin-right:9px;letter-spacing:.1em}
+.sub{font:11px var(--mono);letter-spacing:.16em;color:var(--ink3);text-transform:uppercase;margin-bottom:18px}
+.lead{font-size:15.5px;line-height:1.9;color:#153f66;max-width:860px}
+p{margin:0 0 12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fig{border:1px solid var(--line);background:#fff;padding:10px}
+.fig svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--mono)}
+.fig figcaption{font:10px var(--mono);letter-spacing:.08em;color:var(--ink3);border-top:1px solid var(--line2);margin-top:8px;padding-top:7px;display:flex;justify-content:space-between;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 14px}
+caption{text-align:left;font:10px var(--mono);letter-spacing:.1em;color:var(--ink3);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+th{background:var(--ink);color:#fff;font:600 10.5px var(--mono);letter-spacing:.08em}
+tbody tr:nth-child(even){background:rgba(13,58,99,.028)}
+td b{color:var(--ink)}
+.tag{display:inline-block;font:10px var(--mono);letter-spacing:.08em;border:1px solid var(--ink2);color:var(--ink2);padding:1px 6px;margin:0 4px 3px 0}
+.stamp{display:inline-block;border:2px solid var(--stamp);color:var(--stamp);font:700 11px var(--mono);padding:4px 9px;letter-spacing:.1em;transform:rotate(-1.5deg)}
+.note{border-left:3px solid var(--stamp);background:rgba(176,70,42,.055);padding:10px 14px;font-size:13.5px;margin:14px 0}
+.note .lab{font:700 10px var(--mono);letter-spacing:.12em;color:var(--stamp);display:block;margin-bottom:4px}
+.ok{color:var(--ok);font-weight:700}
+.kv{font-size:13.5px}
+.kv b{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink3);margin-right:8px}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink);margin-top:22px}
+.statgrid>div{padding:11px 13px;border-right:1px solid var(--ink)}
+.statgrid>div:last-child{border-right:0}
+.statgrid .n{font:700 25px var(--mono);color:var(--ink);letter-spacing:-.02em}
+.statgrid .n small{font-size:11px;font-weight:400;letter-spacing:.06em;margin-left:3px;color:var(--ink3)}
+.statgrid .k{font:10px var(--mono);letter-spacing:.06em;color:var(--ink3);margin-top:2px}
+.seals{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.seal{border:1px solid var(--line);padding:8px 12px;font:10px var(--mono);letter-spacing:.08em;color:var(--ink3)}
+.seal b{display:block;color:var(--ink);font-size:13px;margin-top:3px;letter-spacing:.02em}
+.tabs{display:flex;gap:0;border:1px solid var(--ink);border-bottom:0;margin-top:14px;flex-wrap:wrap}
+.tabs button{font:700 11px var(--mono);letter-spacing:.1em;padding:8px 16px;border:0;border-right:1px solid var(--ink);background:#fff;color:var(--ink3);cursor:pointer}
+.tabs button:last-child{border-right:0}
+.tabs button.on{background:var(--ink);color:#fff}
+.tabpanel{display:none;border:1px solid var(--ink);padding:16px}
+.tabpanel.on{display:block}
+.timeline{position:relative;border-left:2px solid var(--ink);margin:14px 0 6px 8px;padding-left:0}
+.tl{position:relative;padding:0 0 16px 22px}
+.tl::before{content:"";position:absolute;left:-7px;top:6px;width:11px;height:11px;background:var(--paper);border:2px solid var(--ink);border-radius:50%}
+.tl .d{font:700 11px var(--mono);color:var(--stamp);letter-spacing:.08em}
+.tl .t{font-weight:700}
+.tl .x{font-size:13px;color:var(--ink2)}
+.refs{font-size:12.5px;line-height:1.85;color:var(--ink2);padding-left:20px}
+.refs li{margin-bottom:3px}
+footer{margin-top:26px;border:2px solid var(--ink);background:var(--paper);padding:20px 26px;box-shadow:5px 5px 0 rgba(13,58,99,.10)}
+footer h5{font:700 11px var(--mono);letter-spacing:.14em;color:var(--ink2);margin:0 0 10px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.rev{width:100%;font-size:11.5px}
+.rev th,.rev td{padding:5px 8px}
+.sigline{font:12px var(--mono);line-height:2.1;letter-spacing:.04em}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}.rail{display:none}main{padding:16px 14px 60px}
+  .cols,.f2{grid-template-columns:1fr}.cols3{grid-template-columns:1fr 1fr}
+  .statgrid{grid-template-columns:1fr 1fr}.statgrid>div{border-bottom:1px solid var(--ink)}
+  .titleblock{grid-template-columns:1fr 1fr}.tb{border-bottom:1px solid var(--ink)}
+  h1{font-size:29px}h2{font-size:21px}.sheet{padding:18px 15px 22px}
+}
+</style>
+</head><body>
+<div class="layout"><nav class="rail"><div class="rl-t">DWG 01 / 图幅索引</div><a href="#s0" title="标题栏">00</a><a href="#s1" title="选题">01</a><a href="#s2" title="构型解构">02</a><a href="#s3" title="技术与取证">03</a><a href="#s4" title="运营场景">04</a><a href="#s5" title="市场经济性">05</a><a href="#s6" title="工业设计视角">06</a><div class="rl-b">SHEET INDEX · 01–07</div></nav><main><div class="titleblock">
+  <div class="tb main"><small>DRAWING TITLE / 图名</small><b>无人驾驶载人航空器系统 EH216-S<br>产品调研与分析</b></div>
+  <div class="tb"><small>DWG NO. / 图号</small><b>JLU-UAM-01</b></div>
+  <div class="tb"><small>SCALE / 比例</small><b>1:20 / 示意</b></div>
+  <div class="tb"><small>SUBJECT / 课程</small><b>飞行汽车技术基础</b></div>
+  <div class="tb"><small>REV / 修订</small><b>A · 2026.11</b></div>
+</div><section class="sheet" id="s0">
+  <div class="sh"><div><div class="no">SHEET 00 / INDEX / 标题栏</div><h2>把驾驶员拿掉之后：一份关于「系统」的产品调研</h2></div><div class="tg">INDEX / 标题栏</div></div>
+  
+  <div class="sub">FUNDAMENTALS OF FLYING VEHICLE TECHNOLOGY · COURSEWORK 01 · DRAWING 00</div>
+  <h1>一台不卖给用户、也不由用户驾驶的飞行器</h1>
+  <p class="lead">这次不写个人飞行器。EH216-S 走的是另一条路：飞机不卖给个人，飞行也不由乘客完成，而是由预设航线、地面指挥中心和运营人共同完成。它是全球第一台把 TC / AC / PC / OC 四证集齐的载人 eVTOL。选它，是因为它把「飞行汽车」这个词里最容易被忽略的一半——<b>运营体系</b>——推到了台前。</p>
+  <div class="cols" style="margin-top:18px">
+    <div>
+      <h3><span class="idx">00.1</span>为什么值得单独立一个图幅</h3>
+      <p>大部分课程作业会盯着构型和参数，但 EH216-S 的公开资料里，篇幅最大的其实是审定历程和运营合格证。这本身就是线索：它的产品边界不在机身上，而在「允许谁、在什么空域、按什么航线、载什么人」。</p>
+      <p>所以我这份调研不按「外形—性能—价格」的顺序写，而是按<b>对象界定 → 构型 → 取证 → 运营 → 经济性 → 设计机会</b>推下来，把机器放回它赖以成立的体系里看。</p>
+    </div>
+    <div>
+      <div class="note"><span class="lab">作者判断 / AUTHOR'S NOTE</span>不能拿评价「一辆车」的指标评价它：没有方向盘、没有驾照、没有私人车库，连「续航焦虑」的主体都不是车主，而是运营人。</div>
+      <div class="seals">
+        <div class="seal">NAME<b>李振宁</b></div><div class="seal">STUDENT ID<b>15231012</b></div>
+        <div class="seal">MAJOR<b>工业设计 · 2023 级</b></div><div class="seal">DATE<b>2026.11</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="statgrid">
+    <div><div class="n">620<small>kg</small></div><div class="k">最大起飞重量（官网口径）</div></div>
+    <div><div class="n">8×2<small>= 16</small></div><div class="k">8 轴共轴双旋翼</div></div>
+    <div><div class="n">30<small>km</small></div><div class="k">设计航程 / 25 min 续航</div></div>
+    <div><div class="n">4<small>证</small></div><div class="k">TC · AC · PC · OC（2025-03 集齐）</div></div>
+  </div>
+
+</section><section class="sheet" id="s1">
+  <div class="sh"><div><div class="no">SHEET 01 / SCOPE / 选题理由</div><h2>对象界定：它究竟是什么</h2></div><div class="tg">SCOPE / 选题理由</div></div>
+  
+  <div class="cols">
+    <div>
+      <h3><span class="idx">01.1</span>名称里已经写清楚了</h3>
+      <p>官方名称是「EH216-S 无人驾驶载人航空器<b>系统</b>」。中国民航局 2022 年 2 月为它单独颁布的《EH216-S 型无人驾驶航空器系统专用条件》，审的也不只是那架飞机，而是包含飞控、链路、地面指挥控制中心与运行规程在内的整套系统。</p>
+      <p>换句话说：<b>单机不是产品，系统才是产品</b>。这一点决定了后面所有分析的角度。</p>
+      <h3><span class="idx">01.2</span>三条选题理由</h3>
+      <p><b>① 取证路径最完整。</b>从 2020 年底提交 TC 申请到 2025 年 3 月拿到 OC，每一个节点都有官方或公开报道可查。相比大量停留在意向订单阶段的机型，它是一台能被「验证」而不是被「想象」的产品。</p>
+      <p><b>② 产品逻辑与个人消费品相反。</b>它不面向私人拥有，面向运营人；卖的不是一架飞机，是一次飞行。这和我见过的多数飞行汽车方案刚好互为反面。</p>
+      <p><b>③ 工业设计的问题被换了。</b>没有飞行员、没有驾驶杆，座舱里只剩两名乘客。设计要解决的不再是「怎么开」，而是「凭什么敢坐」。</p>
+    </div>
+    <div class="fig">
+      <svg viewBox="0 0 500 300" role="img" aria-label="三类 eVTOL 构型的航程与复杂度定位图">
+        <g stroke="#cfe0ef" stroke-width=".8">
+          <line x1="60" y1="30" x2="60" y2="250"/><line x1="60" y1="250" x2="470" y2="250"/>
+          <line x1="60" y1="190" x2="470" y2="190" stroke-dasharray="4 4"/><line x1="60" y1="130" x2="470" y2="130" stroke-dasharray="4 4"/>
+          <line x1="160" y1="30" x2="160" y2="250" stroke-dasharray="4 4"/><line x1="290" y1="30" x2="290" y2="250" stroke-dasharray="4 4"/><line x1="410" y1="30" x2="410" y2="250" stroke-dasharray="4 4"/>
+        </g>
+        <text x="60" y="22" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6">机械复杂度 ↑</text>
+        <text x="470" y="268" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6" text-anchor="end">航程 / 巡航效率 →</text>
+        <circle cx="130" cy="215" r="9" fill="#e8f2fb" stroke="#0d3a63" stroke-width="1.8"/>
+        <text x="146" y="219" font-size="12" fill="#0d3a63">多旋翼（EH216-S）</text>
+        <circle cx="300" cy="140" r="9" fill="#e8f2fb" stroke="#0d3a63" stroke-width="1.8"/>
+        <text x="316" y="144" font-size="12" fill="#0d3a63">复合翼（VT35 等）</text>
+        <circle cx="420" cy="80" r="9" fill="#e8f2fb" stroke="#0d3a63" stroke-width="1.8"/>
+        <text x="370" y="66" font-size="12" fill="#0d3a63">倾转旋翼</text>
+        <path d="M130 215 Q240 180 420 80" fill="none" stroke="#b0462a" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <text x="250" y="278" font-family="ui-monospace,monospace" font-size="9" fill="#b0462a" text-anchor="middle">路线取舍：把复杂度留给机械，还是留给电池与控制</text>
+      </svg>
+      <figcaption><span>图 01-1 · 构型路线定位（示意）</span><span>非比例图</span></figcaption>
+    </div>
+  </div>
+  <div class="note"><span class="lab">批注 / MARGIN NOTE</span>多旋翼常被当成「技术简单的过渡方案」。我不同意：它只是把复杂度从倾转机构搬到了能量密度和控制冗余上，代价换了个地方，没有消失。</div>
+
+</section><section class="sheet" id="s2">
+  <div class="sh"><div><div class="no">SHEET 02 / LAYOUT / 产品解构</div><h2>构型解构：八轴、十六桨、两名乘客</h2></div><div class="tg">LAYOUT / 产品解构</div></div>
+  
+  <div class="cols">
+    <div class="fig"><svg viewBox="0 0 560 440" role="img" aria-label="EH216-S 俯视线稿示意：八轴十六旋翼、中央双座舱、共轴双桨"><defs><pattern id="pg" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#e2edf6" stroke-width=".8"/></pattern></defs><rect width="560" height="440" fill="url(#pg)"/><line x1="280" y1="58" x2="280" y2="390" stroke="#9dbcd8" stroke-width=".9" stroke-dasharray="9 4 2 4"/><line x1="104" y1="214" x2="456" y2="214" stroke="#9dbcd8" stroke-width=".9" stroke-dasharray="9 4 2 4"/><line x1="334.0" y1="214.0" x2="406.0" y2="214.0" stroke="#0d3a63" stroke-width="5.5"/><line x1="334.0" y1="214.0" x2="406.0" y2="214.0" stroke="#ffffff" stroke-width="1.6"/><circle cx="406.0" cy="214.0" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="380.0" y1="214.0" x2="432.0" y2="214.0" stroke="#1b5583" stroke-width="2.6"/><circle cx="406.0" cy="214.0" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="394.0" y1="202.0" x2="418.0" y2="226.0" stroke="#1b5583" stroke-width="1.8"/><line x1="418.0" y1="202.0" x2="394.0" y2="226.0" stroke="#1b5583" stroke-width="1.8"/><circle cx="406.0" cy="214.0" r="4.2" fill="#0d3a63"/><line x1="318.2" y1="252.2" x2="369.1" y2="303.1" stroke="#0d3a63" stroke-width="5.5"/><line x1="318.2" y1="252.2" x2="369.1" y2="303.1" stroke="#ffffff" stroke-width="1.6"/><circle cx="369.1" cy="303.1" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="343.1" y1="303.1" x2="395.1" y2="303.1" stroke="#1b5583" stroke-width="2.6"/><circle cx="369.1" cy="303.1" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="357.1" y1="291.1" x2="381.1" y2="315.1" stroke="#1b5583" stroke-width="1.8"/><line x1="381.1" y1="291.1" x2="357.1" y2="315.1" stroke="#1b5583" stroke-width="1.8"/><circle cx="369.1" cy="303.1" r="4.2" fill="#0d3a63"/><line x1="280.0" y1="268.0" x2="280.0" y2="340.0" stroke="#0d3a63" stroke-width="5.5"/><line x1="280.0" y1="268.0" x2="280.0" y2="340.0" stroke="#ffffff" stroke-width="1.6"/><circle cx="280.0" cy="340.0" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="254.0" y1="340.0" x2="306.0" y2="340.0" stroke="#1b5583" stroke-width="2.6"/><circle cx="280.0" cy="340.0" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="268.0" y1="328.0" x2="292.0" y2="352.0" stroke="#1b5583" stroke-width="1.8"/><line x1="292.0" y1="328.0" x2="268.0" y2="352.0" stroke="#1b5583" stroke-width="1.8"/><circle cx="280.0" cy="340.0" r="4.2" fill="#0d3a63"/><line x1="241.8" y1="252.2" x2="190.9" y2="303.1" stroke="#0d3a63" stroke-width="5.5"/><line x1="241.8" y1="252.2" x2="190.9" y2="303.1" stroke="#ffffff" stroke-width="1.6"/><circle cx="190.9" cy="303.1" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="164.9" y1="303.1" x2="216.9" y2="303.1" stroke="#1b5583" stroke-width="2.6"/><circle cx="190.9" cy="303.1" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="178.9" y1="291.1" x2="202.9" y2="315.1" stroke="#1b5583" stroke-width="1.8"/><line x1="202.9" y1="291.1" x2="178.9" y2="315.1" stroke="#1b5583" stroke-width="1.8"/><circle cx="190.9" cy="303.1" r="4.2" fill="#0d3a63"/><line x1="226.0" y1="214.0" x2="154.0" y2="214.0" stroke="#0d3a63" stroke-width="5.5"/><line x1="226.0" y1="214.0" x2="154.0" y2="214.0" stroke="#ffffff" stroke-width="1.6"/><circle cx="154.0" cy="214.0" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="128.0" y1="214.0" x2="180.0" y2="214.0" stroke="#1b5583" stroke-width="2.6"/><circle cx="154.0" cy="214.0" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="142.0" y1="202.0" x2="166.0" y2="226.0" stroke="#1b5583" stroke-width="1.8"/><line x1="166.0" y1="202.0" x2="142.0" y2="226.0" stroke="#1b5583" stroke-width="1.8"/><circle cx="154.0" cy="214.0" r="4.2" fill="#0d3a63"/><line x1="241.8" y1="175.8" x2="190.9" y2="124.9" stroke="#0d3a63" stroke-width="5.5"/><line x1="241.8" y1="175.8" x2="190.9" y2="124.9" stroke="#ffffff" stroke-width="1.6"/><circle cx="190.9" cy="124.9" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="164.9" y1="124.9" x2="216.9" y2="124.9" stroke="#1b5583" stroke-width="2.6"/><circle cx="190.9" cy="124.9" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="178.9" y1="112.9" x2="202.9" y2="136.9" stroke="#1b5583" stroke-width="1.8"/><line x1="202.9" y1="112.9" x2="178.9" y2="136.9" stroke="#1b5583" stroke-width="1.8"/><circle cx="190.9" cy="124.9" r="4.2" fill="#0d3a63"/><line x1="280.0" y1="160.0" x2="280.0" y2="88.0" stroke="#0d3a63" stroke-width="5.5"/><line x1="280.0" y1="160.0" x2="280.0" y2="88.0" stroke="#ffffff" stroke-width="1.6"/><circle cx="280.0" cy="88.0" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="254.0" y1="88.0" x2="306.0" y2="88.0" stroke="#1b5583" stroke-width="2.6"/><circle cx="280.0" cy="88.0" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="268.0" y1="76.0" x2="292.0" y2="100.0" stroke="#1b5583" stroke-width="1.8"/><line x1="292.0" y1="76.0" x2="268.0" y2="100.0" stroke="#1b5583" stroke-width="1.8"/><circle cx="280.0" cy="88.0" r="4.2" fill="#0d3a63"/><line x1="318.2" y1="175.8" x2="369.1" y2="124.9" stroke="#0d3a63" stroke-width="5.5"/><line x1="318.2" y1="175.8" x2="369.1" y2="124.9" stroke="#ffffff" stroke-width="1.6"/><circle cx="369.1" cy="124.9" r="27" fill="#f8fcff" fill-opacity=".92" stroke="#0d3a63" stroke-width="1.8"/><line x1="343.1" y1="124.9" x2="395.1" y2="124.9" stroke="#1b5583" stroke-width="2.6"/><circle cx="369.1" cy="124.9" r="17" fill="none" stroke="#1b5583" stroke-width="1.3" stroke-dasharray="3 2"/><line x1="357.1" y1="112.9" x2="381.1" y2="136.9" stroke="#1b5583" stroke-width="1.8"/><line x1="381.1" y1="112.9" x2="357.1" y2="136.9" stroke="#1b5583" stroke-width="1.8"/><circle cx="369.1" cy="124.9" r="4.2" fill="#0d3a63"/><rect x="233" y="170" width="94" height="88" rx="13" fill="#ffffff" stroke="#0d3a63" stroke-width="2"/><rect x="243" y="180" width="74" height="31" rx="6" fill="#e8f2fb" stroke="#1b5583" stroke-width="1.2"/><rect x="243" y="217" width="74" height="31" rx="6" fill="#e8f2fb" stroke="#1b5583" stroke-width="1.2"/><text x="280" y="201" text-anchor="middle" font-size="9" fill="#1b5583">SEAT 1</text><text x="280" y="238" text-anchor="middle" font-size="9" fill="#1b5583">SEAT 2</text><g stroke="#5b81a6" stroke-width=".9" fill="#1b5583" font-size="9.5"><line x1="127" y1="34" x2="433" y2="34"/><line x1="127" y1="28" x2="127" y2="40"/><line x1="433" y1="28" x2="433" y2="40"/><text x="280" y="26" text-anchor="middle">≈ 5 730 mm</text><line x1="58" y1="62" x2="58" y2="366"/><line x1="52" y1="62" x2="64" y2="62"/><line x1="52" y1="366" x2="64" y2="366"/><text x="44" y="214" transform="rotate(-90 44 214)" text-anchor="middle">≈ 5 730 mm</text></g><g stroke="#b0462a" stroke-width=".9" fill="#b0462a" font-size="9"><line x1="366" y1="196" x2="420" y2="150"/><text x="424" y="147">① 8 ARMS / 8 轴</text><line x1="404" y1="246" x2="452" y2="276"/><text x="456" y="280">② ×2 COAXIAL</text><line x1="330" y1="186" x2="404" y2="112"/><text x="408" y="109">③ 2-SEAT CABIN</text><line x1="252" y1="270" x2="176" y2="330"/><text x="96" y="344">④ BATTERY / AVIONICS</text></g><text x="24" y="424" font-size="9" fill="#5b81a6">PLAN VIEW · 非工程图 · 按公开参数示意 / NOT TO SCALE</text></svg><figcaption><span>图 02-1 · EH216-S 俯视线稿</span><span>第一角法 / 示意</span></figcaption></div>
+    <div>
+      <table>
+        <caption>表 02-1 · 公开参数汇总</caption>
+        <thead><tr><th style="width:120px">项目</th><th>公开值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td><b>构型</b></td><td>8 轴 16 旋翼（共轴双桨）</td><td>分布式电推进</td></tr>
+          <tr><td><b>载客</b></td><td>2 人</td><td>无驾驶员席位</td></tr>
+          <tr><td><b>尺寸</b></td><td>约 5 730 × 5 730 × 1 930 mm</td><td>官网列宽与高</td></tr>
+          <tr><td><b>最大起飞重量</b></td><td>620 kg</td><td>官网口径；2026 年警用型报道为 650 kg，属不同批次／构型</td></tr>
+          <tr><td><b>最大设计速度</b></td><td>130 km/h</td><td>公开资料口径</td></tr>
+          <tr><td><b>设计航程</b></td><td>30 km</td><td>与 25 min 续航配套</td></tr>
+          <tr><td><b>续航</b></td><td>25 min（常规锂电）</td><td>2024 年固态电池试验飞行达 48 min 10 s，尚未量产</td></tr>
+          <tr><td><b>补充能源</b></td><td>充电约 2 h</td><td>快充与智能电池管理</td></tr>
+          <tr><td><b>材料 / 起落</b></td><td>碳纤维复材 / 滑橇式</td><td>鸥翼门、F1 风格座椅</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="lab">信息缺口 / DATA GAP</span>巡航速度、噪声级、电池容量、单机售价与座舱尺寸，官方没有给出统一可引用的口径。下表的经济性推算凡涉及这些量，均标为<b>作者推断</b>，不作为官方数据。</div>
+    </div>
+  </div>
+  <h3><span class="idx">02.2</span>「系统」的四个组成部分</h3>
+  <div class="cols3">
+    <div><span class="tag">① AIRCRAFT</span><p>飞行器本体：全备份飞控与传感器、多套飞控表决、动力与电池、故障安全系统（自主判断继续飞或安全迫降）。</p></div>
+    <div><span class="tag">② C2 LINK</span><p>加密通信、单机独立密钥、GNSS 与惯导定位；链路既传状态，也承载地面侧的应急干预。</p></div>
+    <div><span class="tag">③ GROUND</span><p>指挥控制中心：机队监控、调度、预警、集中管理。真正「在回路里」的人坐在这里，不在机上。</p></div>
+  </div>
+  <div class="cols3" style="margin-top:6px">
+    <div><span class="tag">④ OPERATION</span><p>运营人、航线审批、起降点、维护与训练体系。OC 审的就是这一层。</p></div>
+    <div><span class="tag">⑤ RULE</span><p>专用条件、空域与运行规章。没有现成标准可套，审查方为这个型号逐条制定。</p></div>
+    <div><span class="tag">⑥ PASSENGER</span><p>两名乘客是这套系统里唯一的「非专业参与者」，也是工业设计真正要照顾的对象。</p></div>
+  </div>
+
+</section><section class="sheet" id="s3">
+  <div class="sh"><div><div class="no">SHEET 03 / CERT / 技术与取证</div><h2>技术路线与四证：一台机器怎样被允许起飞</h2></div><div class="tg">CERT / 技术与取证</div></div>
+  
+  <div class="fig"><svg viewBox="0 0 900 210" role="img" aria-label="EH216-S 适航取证时间线"><line x1="40" y1="112" x2="870" y2="112" stroke="#0d3a63" stroke-width="2"/><line x1="50" y1="112" x2="50" y2="68" stroke="#5b81a6" stroke-width=".9"/><circle cx="50" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="50" y="62" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2020.12</text><text x="50" y="76" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">提交 TC 申请</text><line x1="150" y1="112" x2="150" y2="156" stroke="#5b81a6" stroke-width=".9"/><circle cx="150" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="150" y="160" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2021.01</text><text x="150" y="174" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">民航局受理</text><line x1="250" y1="112" x2="250" y2="68" stroke="#5b81a6" stroke-width=".9"/><circle cx="250" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="250" y="62" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2022.02</text><text x="250" y="76" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">颁布专用条件</text><line x1="350" y1="112" x2="350" y2="156" stroke="#5b81a6" stroke-width=".9"/><circle cx="350" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="350" y="160" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2022.12</text><text x="350" y="174" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">样机制造符合性检查</text><line x1="450" y1="112" x2="450" y2="68" stroke="#5b81a6" stroke-width=".9"/><circle cx="450" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="450" y="62" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2023.08</text><text x="450" y="76" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">完成全部符合性试飞</text><line x1="550" y1="112" x2="550" y2="156" stroke="#5b81a6" stroke-width=".9"/><circle cx="550" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="550" y="160" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2023.10.13</text><text x="550" y="174" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">TC 型号合格证</text><line x1="650" y1="112" x2="650" y2="68" stroke="#5b81a6" stroke-width=".9"/><circle cx="650" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="650" y="62" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2023.12.21</text><text x="650" y="76" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">AC 标准适航证</text><line x1="750" y1="112" x2="750" y2="156" stroke="#5b81a6" stroke-width=".9"/><circle cx="750" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="750" y="160" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2024.03/04</text><text x="750" y="174" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">PC 生产许可证</text><line x1="850" y1="112" x2="850" y2="68" stroke="#5b81a6" stroke-width=".9"/><circle cx="850" cy="112" r="5" fill="#fbfdff" stroke="#0d3a63" stroke-width="1.8"/><text x="850" y="62" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a" text-anchor="middle">2025.03.28</text><text x="850" y="76" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">OC 运营合格证</text><text x="40" y="196" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6">CERTIFICATION TIMELINE / 依据亿航官网《适航审定历程》及公开报道整理</text></svg><figcaption><span>图 03-1 · 适航取证时间线</span><span>2020.12 – 2025.03</span></figcaption></div>
+  <div class="cols" style="margin-top:18px">
+    <div>
+      <table>
+        <caption>表 03-1 · 四证各自解决什么问题</caption>
+        <thead><tr><th>证书</th><th>时间</th><th>回答的问题</th></tr></thead>
+        <tbody>
+          <tr><td><b>TC</b> 型号合格证</td><td>2023-10-13</td><td>设计是否安全、是否符合专用条件</td></tr>
+          <tr><td><b>AC</b> 标准适航证</td><td>2023-12-21</td><td>这一架造出来是否处于安全可用状态</td></tr>
+          <tr><td><b>PC</b> 生产许可证</td><td>2024 年春</td><td>能否按同一质量体系持续批量生产</td></tr>
+          <tr><td><b>OC</b> 运营合格证</td><td>2025-03-28</td><td><b>能否面向公众收费载客</b></td></tr>
+        </tbody>
+      </table>
+      <p>前三证解决「机器能不能上天」，OC 才解决「生意能不能开始」。2025 年 3 月首批 OC 发给广东亿航通用航空与合肥合翼航空，是这条路线真正的分水岭。</p>
+    </div>
+    <div>
+      <h3><span class="idx">03.2</span>审定工作量：证据强度而非数字游戏</h3>
+      <p>官方披露的审定过程：历时 <b>1000+ 天</b>、<b>500+ 项</b>摸底试验、<b>40 000+ 架次</b>飞行、<b>65 大项</b>审查实验、<b>450+ 科目</b>正式符合性验证，含机臂结构强度、起落架静力与落震、座椅安全带静强度、全机静力、螺旋桨等。</p>
+      <p>我的读法是：这些数字证明的是「按当时约定的符合性矩阵逐条验证过」，而不是「风险已经穷尽」。专用条件是 2022 年才为这个型号单独写出来的，说明审定时连安全基线本身都还在成形。</p>
+      <div class="note"><span class="lab">作者判断</span>四证最值得研究的不是「拿到了」，而是「凭什么拿」——在一个没有现成规章的品类里，符合性方法是边审边定义的。</div>
+    </div>
+  </div>
+  <h3><span class="idx">03.3</span>构型路线对比（可切换图签）</h3>
+  <div class="tabs" id="cfgTabs">
+    <button class="on" data-t="p-multi">图签 A · 多旋翼</button>
+    <button data-t="p-comp">图签 B · 复合翼</button>
+    <button data-t="p-tilt">图签 C · 倾转旋翼</button>
+  </div>
+  <div class="tabpanel on" id="p-multi">
+    <table><thead><tr><th>维度</th><th>特征</th><th>对 EH216-S 的意义</th></tr></thead><tbody>
+      <tr><td>悬停效率 / 机构复杂度</td><td>高 / 最低</td><td>没有倾转机构，机械失效路径少，适合短距离点状运行</td></tr>
+      <tr><td>巡航效率 / 航程</td><td>低 / 约 30 km</td><td>全部升力靠旋翼，能量密度直接决定航程上限</td></tr>
+      <tr><td>噪声与下洗</td><td>16 个桨盘，声源分散</td><td>起降点安全半径与公众接受度的关键变量</td></tr>
+      <tr><td>适航难度</td><td>相对可控</td><td>也是它能率先集齐四证的原因之一</td></tr>
+    </tbody></table>
+  </div>
+  <div class="tabpanel" id="p-comp">
+    <table><thead><tr><th>维度</th><th>特征</th><th>代表</th></tr></thead><tbody>
+      <tr><td>构型</td><td>升力旋翼 + 巡航机翼 / 推进桨分工</td><td>亿航 VT35、峰飞「盛世龙」</td></tr>
+      <tr><td>航程</td><td>显著高于纯多旋翼，面向跨城 / 跨海</td><td>中长途空中交通</td></tr>
+      <tr><td>代价</td><td>两套动力系统、转换阶段控制复杂</td><td>审定与运维成本上升</td></tr>
+    </tbody></table>
+  </div>
+  <div class="tabpanel" id="p-tilt">
+    <table><thead><tr><th>维度</th><th>特征</th><th>代表</th></tr></thead><tbody>
+      <tr><td>构型</td><td>旋翼 / 机翼整体倾转</td><td>Joby S4、Archer Midnight</td></tr>
+      <tr><td>效率</td><td>悬停与巡航兼顾，速度最高</td><td>面向城市通勤</td></tr>
+      <tr><td>代价</td><td>倾转机构是全新失效路径，FAA 审定周期长</td><td>目前多在取证阶段</td></tr>
+    </tbody></table>
+  </div>
+
+</section><section class="sheet" id="s4">
+  <div class="sh"><div><div class="no">SHEET 04 / OPS / 运营场景</div><h2>运营与场景：卖的不是飞机，是一次飞行</h2></div><div class="tg">OPS / 运营场景</div></div>
+  
+  <div class="fig"><svg viewBox="0 0 880 230" role="img" aria-label="无人驾驶运行概念图：乘客、起降点、预设航线、地面指挥中心"><rect x="30" y="70" width="160" height="74" fill="#fff" stroke="#0d3a63" stroke-width="1.8"/><text x="40" y="92" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6" letter-spacing="1">PASSENGER</text><text x="40" y="118" font-size="14" fill="#0d3a63" font-weight="700">乘客 / 2 座</text><rect x="235" y="70" width="160" height="74" fill="#fff" stroke="#0d3a63" stroke-width="1.8"/><text x="245" y="92" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6" letter-spacing="1">VERTIPORT</text><text x="245" y="118" font-size="14" fill="#0d3a63" font-weight="700">起降点</text><rect x="440" y="70" width="160" height="74" fill="#fff" stroke="#0d3a63" stroke-width="1.8"/><text x="450" y="92" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6" letter-spacing="1">PRESET ROUTE</text><text x="450" y="118" font-size="14" fill="#0d3a63" font-weight="700">预设航线</text><rect x="645" y="70" width="200" height="74" fill="#fff" stroke="#0d3a63" stroke-width="1.8"/><text x="655" y="92" font-family="ui-monospace,monospace" font-size="9" fill="#5b81a6" letter-spacing="1">COMMAND CENTER</text><text x="655" y="118" font-size="14" fill="#0d3a63" font-weight="700">地面指挥中心</text><line x1="190" y1="107" x2="230" y2="107" stroke="#b0462a" stroke-width="1.6"/><polygon points="234,107 226,102 226,112" fill="#b0462a"/><line x1="395" y1="107" x2="435" y2="107" stroke="#b0462a" stroke-width="1.6"/><polygon points="439,107 431,102 431,112" fill="#b0462a"/><line x1="600" y1="107" x2="640" y2="107" stroke="#b0462a" stroke-width="1.6"/><polygon points="644,107 636,102 636,112" fill="#b0462a"/><path d="M745 144 L745 190 L95 190 L95 144" fill="none" stroke="#1b5583" stroke-width="1.2" stroke-dasharray="5 4"/><text x="420" y="206" font-family="ui-monospace,monospace" font-size="9" fill="#1b5583" text-anchor="middle">C2 LINK / 实时监控 · 调度 · 应急干预（非实时杆操纵）</text><text x="30" y="30" font-family="ui-monospace,monospace" font-size="10" fill="#b0462a">NO ONBOARD PILOT · 机上无驾驶员</text></svg><figcaption><span>图 04-1 · 无人驾驶运行概念（ConOps）</span><span>示意</span></figcaption></div>
+  <div class="cols" style="margin-top:18px">
+    <div>
+      <h3><span class="idx">04.1</span>航线是预先写好的</h3>
+      <p>乘客不参与操纵，飞机按预设航线、在地面指挥中心监控下完成点对点飞行。这一句看似简单，却把产品形态整个改了：不能临时改目的地，不能绕开一片雷雨，也不能「多飞一圈」。<b>灵活性被换成了可审查性</b>。</p>
+      <p>因此起降点、空域、气象门限、放行流程都不是配套设施，而是产品定义的一部分。</p>
+      <h3><span class="idx">04.2</span>场景适配度排序</h3>
+      <table>
+        <caption>表 04-1 · 场景适配度（作者判断）</caption>
+        <thead><tr><th>场景</th><th style="width:80px">适配度</th><th>判断依据</th></tr></thead>
+        <tbody>
+          <tr><td><b>景区 / 低空文旅</b></td><td class="ok">★★★★★</td><td>航线固定、地面人口稀疏、单次 10–20 min 体验与航程包线吻合；已有林芝、东湖等公开案例</td></tr>
+          <tr><td><b>警务 / 应急 / 巡查</b></td><td>★★★★☆</td><td>2026-01 广州黄埔警用型列装；任务价值高，但城区运行要求更严</td></tr>
+          <tr><td><b>岛际 / 应急物资</b></td><td>★★★☆☆</td><td>固定走廊可隔离，但载荷与重心需重新校验</td></tr>
+          <tr><td><b>城市通勤</b></td><td>★★☆☆☆</td><td>25 min / 30 km 不足以支撑通勤，高密度混合空域尚无成熟规则</td></tr>
+          <tr><td><b>私人拥有</b></td><td>★☆☆☆☆</td><td>无驾驶员界面、需 OC 与运营体系，个人购买在制度上就不成立</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3><span class="idx">04.3</span>为什么用户不是个人</h3>
+      <p>它不需要车库、驾照和充电桩，需要的是运营合格证、经批准的航线、值守的指挥中心和受过训练的地勤。买一台回家这件事，在这套体系里没有位置。</p>
+      <p>所以「市场」的单位不是台数，是<b>可运营起降点 × 单机日架次 × 客座率</b>。这与个人消费品的量级逻辑完全不同。</p>
+      <div class="note"><span class="lab">批注</span>我在图 04-1 里故意把地面指挥中心画得比飞机还宽：在这台产品里，那间屋子才是真正的「驾驶舱」。</div>
+      <h3><span class="idx">04.4</span>公开运行线索</h3>
+      <p><span class="tag">广州黄埔</span><span class="tag">西藏林芝</span><span class="tag">武汉东湖</span><span class="tag">巴西试飞许可</span><span class="tag">墨西哥特殊适航证</span></p>
+      <p style="font-size:13px;color:var(--ink2)">另有公开资料称 2026 年初该型号全球累计飞行超 8 万架次；不同来源统计口径不一，此处仅作趋势参考。</p>
+    </div>
+  </div>
+
+</section><section class="sheet" id="s5">
+  <div class="sh"><div><div class="no">SHEET 05 / COST / 市场可行性</div><h2>市场与经济性：门槛不在飞机价格</h2></div><div class="tg">COST / 市场可行性</div></div>
+  
+  <div class="cols">
+    <div>
+      <h3><span class="idx">05.1</span>一道量级推算题</h3>
+      <p>官方没有公开单机售价与运营成本，下面是<b>作者推断的量级模型</b>，只用来判断瓶颈在哪，不作为报价依据。</p>
+      <table>
+        <caption>表 05-1 · 单机运营经济性（作者推断，非官方）</caption>
+        <thead><tr><th>变量</th><th>取值假设</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>单次飞行时长</td><td>10–15 min</td><td>低于 25 min 续航上限，留返航裕度</td></tr>
+          <tr><td>日架次</td><td>6–10 架次</td><td>受充电约 2 h 与周转流程约束</td></tr>
+          <tr><td>客座率</td><td>2 人 / 架次</td><td>双座，理论上座率易满</td></tr>
+          <tr><td>主要成本</td><td>折旧 + 电池循环 + 起降点 + 地面站与人员</td><td><b>后两项才是固定成本大头</b></td></tr>
+        </tbody>
+      </table>
+      <p>结论很直白：即使单机价格降到可批量采购的水平，一台飞机一天也只能飞十来次、每次两个人。真正的稀缺资源是<b>起降点、空域时刻、OC 资质与公众接受度</b>，不是机体本身。</p>
+    </div>
+    <div>
+      <h3><span class="idx">05.2</span>不引用「万亿」口号</h3>
+      <p>低空经济的宏观规模数字对这份作业没有意义。我把市场收敛成一条可核对的链：</p>
+      <p class="kv"><b>可运营起降点数</b>　×　<b>单机日架次</b>　×　<b>客座率</b>　×　<b>年可飞天数</b>　=　年载客人次</p>
+      <p>其中「可运营起降点数」受审批、噪声、安全半径与地面人口密度共同限制，是增长最慢的一项。谁先把它标准化，谁才真正拿到规模。</p>
+      <div class="note"><span class="lab">作者判断</span>OC 比 TC 更稀缺：设计可以复制，运行资质、航线与起降点网络不能。这也解释了为什么它的商业化节奏由监管而非产能决定。</div>
+      <h3><span class="idx">05.3</span>与另一条路线的位置关系</h3>
+      <p>面向个人消费的分体式飞行汽车走的是「卖产品」，EH216-S 走的是「卖服务」，二者不构成直接竞争。同公司的 VT35 复合翼则补上了长航程一侧，属于体系内的分工，不是替代。</p>
+    </div>
+  </div>
+
+</section><section class="sheet" id="s6">
+  <div class="sh"><div><div class="no">SHEET 06 / DESIGN / 机会点</div><h2>工业设计视角：座舱里没有「司机」了</h2></div><div class="tg">DESIGN / 机会点</div></div>
+  
+  <p class="lead">这一节是我作为工业设计学生的判断。前面五节在讲它怎么被造出来、怎么被允许飞；这一节讲一个更朴素的问题：<b>两个普通人坐进一个没有驾驶员的舱里，凭什么觉得安全？</b></p>
+  <div class="cols3">
+    <div><h3><span class="idx">06-1</span>信任替代操纵</h3><p>传统座舱用「看得见的操作者」提供安全感。这里什么都没有。信任只能靠流程补：登机前的说明、舱内可见的状态、可预期的动作节奏。设计对象从「操纵界面」变成「信任界面」。</p></div>
+    <div><h3><span class="idx">06-2</span>状态要被翻译</h3><p>「飞控表决正常 / 链路正常 / 准备返航」是工程语言，乘客看不懂。需要一套非告警式的状态表达，既不制造恐慌，也不假装一切无事。</p></div>
+    <div><h3><span class="idx">06-3</span>鸥翼门与登机动线</h3><p>两人舱、滑橇起落架、鸥翼门，登机姿态和上下车顺序都要重新设计；还要考虑行动不便者与紧急撤离时的开门方向。</p></div>
+  </div>
+  <div class="cols3" style="margin-top:6px">
+    <div><h3><span class="idx">06-4</span>观景与噪声的冲突</h3><p>全景视野是文旅场景的卖点，但 16 个桨盘的下洗噪声与振动会直接削弱体验。舱体开口、玻璃与隔声必须一起定，不能等造型定完再补。</p></div>
+    <div><h3><span class="idx">06-5</span>自解释的应急图示</h3><p>机上没人现场指挥。安全带、舱门、应急手柄的图示必须在无人解释、乘客可能慌乱的条件下自己说清楚，且断电时仍可操作。</p></div>
+    <div><h3><span class="idx">06-6</span>真正的高危界面在地面</h3><p>一人监控多机时，告警优先级、机队态势、接管权限边界，是比座舱更关键的人机界面。工业设计若只盯着舱内，会漏掉风险最集中的那一屏。</p></div>
+  </div>
+  <div class="note"><span class="lab">一句话总结作业一</span>EH216-S 把「驾驶」从产品里拿走了，于是工业设计的主战场也从座舱移到了体系：起降点、流程、地面站和乘客的信任，全都成了设计对象。</div>
+  <h3><span class="idx">06.7</span>结论</h3>
+  <p>它不是参数最漂亮的机型，但它是唯一一台能让我把「产品—取证—运营—设计」完整地串起来看的机型。四证证明的是体系被建立了，而体系本身，才是这台产品真正的形态。</p>
+
+</section><h3><span class="idx">REF</span>主要参考来源</h3><ol class="refs"><li>亿航智能官网：EH216-S 产品页（尺寸、最大起飞重量、航程、速度、动力构型与全备份说明）</li><li>亿航智能官网：《适航审定历程》（2020-12 申请 → 2025-03 OC，审定工作量数据）</li><li>中国民用航空局 / 中国民航报：《从 0 到 1，中国方案让「空中的士」飞向未来》，EH216-S 专用条件与 TC 审定</li><li>《EH216-S 型无人驾驶航空器系统专用条件》，中国民航局，2022-02</li><li>广东省人民政府门户网站：《全国首台警用载人无人机在广州入列》，2026-01</li><li>中华工商网：《亿航智能：让低空经济走近千家万户》，OC 与商业化运营，2025-06</li><li>公开报道：西藏林芝高海拔文旅飞行、武汉东湖低空观光、巴西试验飞行许可、墨西哥特殊适航证</li><li>JARUS SORA 2.0 / 2.5，Specific Operations Risk Assessment（特定运行风险评估方法）</li><li>《民用无人驾驶航空器运行安全管理规定》及 CCAR-21-R4 相关符合性方法（MC0–MC9）</li><li>N. Leveson, Engineering a Safer World（系统安全理论，用于「责任边界」讨论）</li></ol><footer>
+  <div class="f2">
+    <div><h5>REVISION RECORD / 修订记录</h5>
+      <table class="rev"><thead><tr><th>REV</th><th>DATE</th><th>DESCRIPTION</th><th>DRAWN</th></tr></thead>
+      <tbody><tr><td>A</td><td>2026-11-24</td><td>首次提交 · 作业一：EH216-S 全方位调研与分析</td><td>李振宁</td></tr></tbody></table>
+      <h5 style="margin-top:16px">SUBMISSION / 提交信息</h5>
+      <div class="sigline">姓名：李振宁<br>学号：15231012<br>专业：工业设计 · 2023 级<br>课程：飞行汽车技术基础 · 2026 秋<br>提交形式：Web 页面（GitHub Pages）</div>
+    </div>
+    <div><h5>NOTES / 图幅备注</h5>
+      <div class="sigline">图号：JLU-UAM-01<br>单位：mm / kg / km / min<br>投影：第一角法（示意）<br>公差：未注尺寸仅供参考<br>本图纸为非工程图，按公开资料示意绘制</div>
+      <div class="seals" style="margin-top:14px">
+        <div class="seal">DRAWN BY<b>李振宁</b></div><div class="seal">STUDENT ID<b>15231012</b></div>
+        <div class="seal">CHECKED<b>SELF</b></div>
+      </div>
+      <div class="stamp" style="margin-top:16px">仅供课程作业使用</div>
+    </div>
+  </div>
+</footer></main></div>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.rail a'));
+  var secs=[].slice.call(document.querySelectorAll('.sheet[id]'));
+  function spy(){
+    var y=window.scrollY+160,cur=null;
+    secs.forEach(function(s){if(s.offsetTop<=y)cur=s;});
+    links.forEach(function(a){a.classList.toggle('on',!!cur&&a.getAttribute('href')==='#'+cur.id);});
+  }
+  window.addEventListener('scroll',spy,{passive:true});spy();
+})();
+
+
+(function(){
+  var t=document.getElementById('cfgTabs');
+  if(!t)return;
+  t.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call(t.querySelectorAll('button'),function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    [].forEach.call(document.querySelectorAll('.tabpanel'),function(p){p.classList.remove('on');});
+    var p=document.getElementById(b.getAttribute('data-t'));if(p)p.classList.add('on');
+  });
+})();
+</script>
+</body></html>
